@@ -37,9 +37,9 @@ export default function StepTwo({
 
     useEffect(() => {
         getSettings().then((s) => {
-            if (s?.schedule) {
-                setScheduleStart(s.schedule.start)
-                setScheduleEnd(s.schedule.end)
+            if (s?.schedule?.default) {
+                setScheduleStart(s.schedule.default.start)
+                setScheduleEnd(s.schedule.default.end)
             }
         })
     }, [])

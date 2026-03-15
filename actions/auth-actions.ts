@@ -55,7 +55,7 @@ export async function getUserProfile(uid: string): Promise<UserProfile | null> {
     return snap.exists() ? (snap.val() as UserProfile) : null
 }
 
-export async function getCurrentUserRole(uid: string): Promise<'admin' | 'client' | null> {
+export async function getCurrentUserRole(uid: string): Promise<'admin' | 'client' | 'employee' | null> {
     const profile = await getUserProfile(uid)
     return profile?.role ?? null
 }

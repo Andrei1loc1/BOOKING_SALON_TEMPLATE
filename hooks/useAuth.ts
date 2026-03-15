@@ -9,7 +9,7 @@ import type { UserProfile } from '@/types'
 export function useAuth() {
     const [user, setUser] = useState<User | null>(null)
     const [profile, setProfile] = useState<UserProfile | null>(null)
-    const [role, setRole] = useState<'admin' | 'client' | null>(null)
+    const [role, setRole] = useState<'admin' | 'client' | 'employee' | null>(null)
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
