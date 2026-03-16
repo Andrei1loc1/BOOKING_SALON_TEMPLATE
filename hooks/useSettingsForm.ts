@@ -22,9 +22,11 @@ export function useSettingsForm() {
     // Initialize form with settings from database
     useEffect(() => {
         if (settings) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             // Migrate old format to new format if needed
             if (!('sameForAll' in settings.schedule)) {
                 const oldSchedule = settings.schedule as { start: number; end: number }
+                // eslint-disable-next-line react-hooks/set-state-in-effect
                 setForm({
                     ...DEFAULT_SETTINGS,
                     ...settings,
@@ -42,6 +44,7 @@ export function useSettingsForm() {
                 })
             } else {
                 // Merge with defaults to ensure all new fields exist
+                // eslint-disable-next-line react-hooks/set-state-in-effect
                 setForm({
                     ...DEFAULT_SETTINGS,
                     ...settings,
