@@ -72,7 +72,7 @@ export function PWAInstallPrompt() {
           {/* App icon */}
           <div className="rounded-2xl overflow-hidden shrink-0" style={{ border: "1px solid oklch(0.84 0.18 80 / 0.25)" }}>
             <Image
-              src="/icons/icon-192x192.png"
+              src="/icons/icon_app.png"
               alt="BarberApp"
               width={46}
               height={46}
