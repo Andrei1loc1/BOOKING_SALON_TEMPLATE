@@ -67,6 +67,7 @@ const Page = () => {
             </div>
 
             <div
+                id="your-bookings"
                 className="relative mx-5 my-10 rounded-3xl p-[1px] overflow-hidden"
                 style={THEME_STYLES.borderGradient}
             >

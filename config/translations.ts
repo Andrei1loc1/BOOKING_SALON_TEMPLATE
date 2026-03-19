@@ -58,6 +58,7 @@ export interface Translations {
         greeting: string
         subtitle: string
         bookAppointment: string
+        viewYourBookings: string
     }
 
     /** Stats/labels on dashboard */
@@ -295,6 +296,7 @@ export const ro: Translations = {
         greeting: 'Bine ai venit',
         subtitle: 'Programări rapide și simple',
         bookAppointment: 'Programează o vizită',
+        viewYourBookings: 'Mergi la rezervările tale',
     },
 
     stats: {
@@ -518,6 +520,7 @@ export const en: Translations = {
         greeting: 'Welcome',
         subtitle: 'Quick and easy bookings',
         bookAppointment: 'Book an appointment',
+        viewYourBookings: 'Go to your bookings',
     },
 
     stats: {

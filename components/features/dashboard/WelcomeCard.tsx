@@ -37,7 +37,7 @@ const WelcomeCard = () => {
                         {settings?.shopName ? `La ${settings.shopName}` : t.welcome.subtitle}
                     </CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="flex flex-col gap-3">
                     <Button
                         onClick={() => router.push('/booking')}
                         className="
@@ -56,6 +56,17 @@ const WelcomeCard = () => {
                             "
                         />
                         <span className="relative">{t.welcome.bookAppointment}</span>
+                    </Button>
+
+                    <Button
+                        variant="outline"
+                        onClick={() => {
+                            const el = document.getElementById('your-bookings')
+                            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                        }}
+                        className="w-full font-semibold rounded-lg py-4"
+                    >
+                        {t.welcome.viewYourBookings}
                     </Button>
                 </CardContent>
             </GlowCard>
