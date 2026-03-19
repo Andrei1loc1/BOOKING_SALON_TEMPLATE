@@ -1,49 +1,96 @@
-# 🚀 Salon Booking App - Whitelabel SaaS Template
+# Salon Booking App — Whitelabel SaaS Template
 
-A professional, scalable, and fully dynamic booking application template designed for hair salons, barbershops, and beauty centers. Built with a Whitelabel/SaaS architecture in mind, allowing you to instantly deploy unique instances for multiple clients with isolated Firebase databases.
+> A production-ready booking platform for hair salons, barbershops, and beauty centers.  
+> Deploy a fully branded, isolated instance for any client in under **5 minutes**.
 
-## ✨ Key Features
+<br />
 
-- **📱 User Booking Flow:** Seamless step-by-step booking experience optimized for mobile devices.
-- **🛡️ Admin Dashboard:** Complete control for salon owners over appointments, services, users (employees/clients), and business settings.
-- **🎨 Whitelabel Ready (Dynamic Theming):** Easily switch color palettes and business features via a single central config file (`config/salonConfig.ts`).
-- **☁️ Multi-Tenant via Separate DBs:** Fully isolated client data. Each deployment connects to its own dedicated Firebase project.
-- **⚡ Automated Setup Script:** Includes a specialized seeder script (`scripts/init-salon.js`) to instantly generate the necessary database structure and the initial admin user.
-- **🔥 Real-time Data:** Powered by Firebase Realtime Database and Auth for instant, reliable updates across all clients.
-- **📊 Live Statistics & Offer Management:** Built-in tools for tracking revenue, popular services, and managing discount campaigns dynamically.
+## Table of Contents
 
-## 🛠️ Tech Stack
+- [Overview](#overview)
+- [Key Features](#key-features)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Environment Variables](#environment-variables)
+  - [Run Locally](#run-locally)
+- [Whitelabel Deployment (New Client)](#whitelabel-deployment-new-client)
+  - [Step 1 — Initialize Firebase](#step-1--initialize-firebase)
+  - [Step 2 — Customize the Theme](#step-2--customize-the-theme)
+  - [Step 3 — Deploy to Vercel](#step-3--deploy-to-vercel)
+- [Project Structure](#project-structure)
+- [License](#license)
 
-- **Framework:** Next.js (App Router)
-- **Language:** TypeScript
-- **Styling:** Tailwind CSS + OKLCH Colors (for mathematically precise theme generation)
-- **Backend & Auth:** Firebase (Authentication, Realtime Database)
-- **Icons:** Lucide React
-- **UI Components:** Radix UI / shadcn-like custom builds
+---
 
-## 🚀 Getting Started
+## Overview
 
-### 1. Prerequisites
-- Node.js 18+
-- A Google Firebase account (with Realtime Database and Authentication via Phone enabled)
-- Vercel account (for fast deployment)
+This template provides a **complete, multi-tenant SaaS foundation** for appointment-based businesses. Each client deployment connects to its own dedicated Firebase project, ensuring full data isolation and independent scalability.
 
-### 2. Installation
+The codebase is designed to be reusuable and configurable — a single repository powers unlimited branded instances, with all customization centralized in one config file.
 
-Clone the repository:
+---
+
+## Key Features
+
+| Feature | Description |
+|---|---|
+| 📱 **Client Booking Flow** | Smooth, step-by-step appointment wizard optimized for mobile |
+| 🛡️ **Admin Dashboard** | Full control over appointments, staff, clients, services, and settings |
+| 🎨 **Dynamic Theming** | Switch brand colors per-client via `config/salonConfig.ts` — no code changes needed |
+| ☁️ **Multi-Tenant Architecture** | Each client has a fully isolated Firebase project and database |
+| ⚡ **Automated Setup Script** | `scripts/init-salon.js` seeds the entire DB and creates the admin account in one command |
+| 🔥 **Real-Time Updates** | Firebase Realtime Database keeps all views in sync instantly |
+| 📊 **Live Statistics** | Revenue tracking, trending services, and daily appointment insights |
+| 🏷️ **Offer & Discount Management** | Create and display promotional campaigns directly from the dashboard |
+| 📲 **PWA Support** | Installable as a Progressive Web App for a native app feel |
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| **Framework** | [Next.js](https://nextjs.org/) (App Router) |
+| **Language** | TypeScript |
+| **Styling** | Tailwind CSS + OKLCH color system |
+| **Backend & Auth** | Firebase (Authentication, Realtime Database) |
+| **Icons** | Lucide React |
+| **UI Primitives** | Radix UI / custom shadcn-style components |
+| **Deployment** | Vercel |
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- **Node.js** v18 or higher
+- A **Google Firebase** account with:
+  - Authentication enabled (Phone provider)
+  - Realtime Database created
+- A **Vercel** account (recommended for deployment)
+
+---
+
+### Installation
+
 ```bash
+# 1. Clone the repository
 git clone https://github.com/Andrei1loc1/BOOKING_SALON_TEMPLATE.git
 cd BOOKING_SALON_TEMPLATE
-```
 
-Install dependencies:
-```bash
+# 2. Install dependencies
 npm install
 ```
 
-### 3. Environment Setup
+---
 
-Create a `.env.local` file in the root directory and add your Firebase configuration:
+### Environment Variables
+
+Create a `.env.local` file in the project root and populate it with your Firebase project credentials:
+
 ```env
 NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
@@ -54,46 +101,91 @@ NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
 NEXT_PUBLIC_FIREBASE_DATABASE_URL=https://your_project-default-rtdb.europe-west1.firebasedatabase.app
 ```
 
-## 🏭 Whitelabel Deployment Process (For New Clients)
+> **Where to find these values:**  
+> Firebase Console → Your Project → Project Settings → General → "Your apps" section.
 
-Deploying a new instance for a client takes less than 5 minutes.
+---
 
-### Step 1: Initialize the Client's Database
-1. Create a new Firebase project for the client.
-2. Enable **Authentication** (Phone provider) and **Realtime Database**.
-3. Download the Service Account JSON from *Firebase Project Settings -> Service Accounts*.
-4. Save it as `firebase-service-account.json` in the project root *(Note: This file is git-ignored for security).*
-5. Update the `CLIENT_CONFIG` block in `scripts/init-salon.js` with the new client's details (Admin Phone, Name, Shop Name, currency, etc.).
-6. Run the initialization script:
-   ```bash
-   node scripts/init-salon.js
-   ```
-   *This automatically generates the default services, settings, empty collections, and creates the owner's Admin account with zero manual Firebase data entry.*
+### Run Locally
 
-### Step 2: Customize Visual Theme
+```bash
+npm run dev
+```
+
+The app will be available at [http://localhost:3000](http://localhost:3000).
+
+---
+
+## Whitelabel Deployment (New Client)
+
+A new fully-branded client instance can be live in under 5 minutes by following these three steps.
+
+### Step 1 — Initialize Firebase
+
+1. Create a **new Firebase project** for the client.
+2. Enable **Authentication** → Phone provider.
+3. Enable **Realtime Database** (choose the region closest to the client).
+4. Go to **Project Settings → Service Accounts** and download the Service Account JSON.
+5. Save the file as `firebase-service-account.json` in the project root.  
+   *(This file is git-ignored — never commit it.)*
+6. Open `scripts/init-salon.js` and update the `CLIENT_CONFIG` block with the client's details:
+   - Admin phone number
+   - Salon name
+   - Currency
+   - Default services
+7. Run the seeder:
+
+```bash
+node scripts/init-salon.js
+```
+
+This command automatically creates all database collections, default services, business settings, and the owner's admin account — with zero manual Firebase data entry.
+
+---
+
+### Step 2 — Customize the Theme
+
 1. Open `config/salonConfig.ts`.
-2. Update the `THEME_COLORS` with one of the predefined presets (e.g., Gold, Blue, Green, Purple, Rose) or create a custom OKLCH palette.
-3. Replace `public/logo.svg` and `public/favicon.ico` with the client's logo.
+2. Set `THEME_COLORS` to one of the built-in presets (`Gold`, `Blue`, `Green`, `Purple`, `Rose`) or define a custom OKLCH palette.
+3. Replace `public/logo.svg` and `public/favicon.ico` with the client's branding assets.
 
-### Step 3: Deploy
-1. Push your custom changes to a branch or just connect your main repo.
-2. Create a new project in Vercel.
-3. Add the new client's Firebase variables to the Vercel Environment Variables section.
-4. Click **Deploy**. The site is instantly live and fully decoupled!
+---
 
-## 📁 Project Structure
+### Step 3 — Deploy to Vercel
 
-```text
-├── actions/            # Server actions for booking logic and admin operations
-├── app/                # Next.js App Router (/(client) and /(admin) views grouped)
-├── components/         # Reusable UI cards, buttons, dashboard components
-├── config/             # Whitelabel configuration (Salon presets, Themes, Definitions)
-├── hooks/              # Custom React hooks (useAuth, useAppointments, useSettings)
-├── lib/                # Utility modules (date formatting, calculation utils)
-├── scripts/            # Setup and deployment automation scripts (init-salon.js)
-├── types/              # TypeScript global definitions
-└── public/             # Static assets (logos, icons)
+1. Push your customized branch to GitHub.
+2. Create a **new Vercel project** linked to the repository.
+3. Add the client's Firebase credentials under **Settings → Environment Variables**.
+4. Click **Deploy**.
+
+The new instance is live, fully isolated, and independently scalable.
+
+---
+
+## Project Structure
+
+```
+bookingapp/
+├── actions/        # Server actions — booking logic, admin operations
+├── app/            # Next.js App Router
+│   ├── (client)/   # Customer-facing pages (booking flow, history)
+│   └── (admin)/    # Admin pages (dashboard, schedule, settings)
+├── components/     # Reusable UI components (cards, modals, buttons)
+├── config/         # Whitelabel config (theme presets, salon definitions)
+├── hooks/          # Custom React hooks (useAuth, useAppointments, etc.)
+├── lib/            # Utility functions (date helpers, formatters, calculators)
+├── scripts/        # Automation scripts (init-salon.js)
+├── types/          # Global TypeScript type definitions
+└── public/         # Static assets (logo, icons, manifest)
 ```
 
 ---
-*Built with ❤️ for modern businesses looking for scalable software solutions.*
+
+## License
+
+This project is a **commercial template**. Redistribution or resale without explicit permission is not permitted.  
+For licensing inquiries, please open an issue or contact the author directly.
+
+---
+
+*Built with care for modern businesses that deserve scalable, professional software.*
