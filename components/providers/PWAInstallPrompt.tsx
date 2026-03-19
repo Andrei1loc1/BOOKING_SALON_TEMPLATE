@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Download, X } from "lucide-react";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -15,7 +16,6 @@ export function PWAInstallPrompt() {
   const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
-    // Nu afișa dacă deja e instalată sau pe iOS (care nu suportă beforeinstallprompt)
     const isStandalone =
       window.matchMedia("(display-mode: standalone)").matches ||
       // @ts-expect-error - iOS specific
@@ -23,17 +23,15 @@ export function PWAInstallPrompt() {
 
     if (isStandalone) return;
 
-    // Nu afișa dacă user-ul a respins recent (24h)
     const dismissedAt = localStorage.getItem("pwa-install-dismissed");
     if (dismissedAt) {
       const diff = Date.now() - parseInt(dismissedAt);
-      if (diff < 24 * 60 * 60 * 1000) return; // 24 ore
+      if (diff < 24 * 60 * 60 * 1000) return;
     }
 
     const handler = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
-      // Arată bannerul după 3 secunde
       setTimeout(() => setShow(true), 3000);
     };
 
@@ -45,9 +43,7 @@ export function PWAInstallPrompt() {
     if (!deferredPrompt) return;
     await deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === "accepted") {
-      setShow(false);
-    }
+    if (outcome === "accepted") setShow(false);
     setDeferredPrompt(null);
   };
 
@@ -64,104 +60,50 @@ export function PWAInstallPrompt() {
       className="fixed bottom-0 left-0 right-0 z-[100] p-4 animate-in slide-in-from-bottom-4 duration-500"
       style={{ paddingBottom: "max(env(safe-area-inset-bottom), 16px)" }}
     >
+      {/* Gold gradient border wrapper — exact modal style */}
       <div
+        className="relative rounded-3xl p-[1px]"
         style={{
-          background: "oklch(0.16 0 0 / 0.95)",
-          backdropFilter: "blur(24px)",
-          WebkitBackdropFilter: "blur(24px)",
-          border: "1px solid oklch(0.30 0 0 / 0.6)",
-          borderRadius: "20px",
-          boxShadow: "0 -4px 40px oklch(0 0 0 / 0.5), 0 0 0 1px oklch(0.84 0.18 80 / 0.1)",
+          background: "linear-gradient(135deg, oklch(0.84 0.18 80) 0%, transparent 35%, transparent 65%, oklch(0.55 0.15 72) 100%)",
         }}
-        className="flex items-center gap-3 p-4"
       >
-        {/* Icon */}
-        <div
-          style={{
-            width: 52,
-            height: 52,
-            borderRadius: 14,
-            overflow: "hidden",
-            flexShrink: 0,
-            border: "1px solid oklch(0.84 0.18 80 / 0.3)",
-          }}
-        >
-          <Image
-            src="/icons/icon-192x192.png"
-            alt="BarberApp"
-            width={52}
-            height={52}
-            style={{ borderRadius: 14 }}
-          />
-        </div>
+        <div className="relative rounded-[calc(1.5rem-1px)] p-4 flex items-center gap-3" style={{ background: "oklch(0.14 0 0)" }}>
 
-        {/* Text */}
-        <div className="flex-1 min-w-0">
-          <p
-            style={{
-              fontSize: 14,
-              fontWeight: 700,
-              color: "oklch(0.98 0 0)",
-              margin: 0,
-              lineHeight: 1.3,
-            }}
-          >
+          {/* App icon */}
+          <div className="rounded-2xl overflow-hidden shrink-0" style={{ border: "1px solid oklch(0.84 0.18 80 / 0.25)" }}>
+            <Image
+              src="/icons/icon-192x192.png"
+              alt="BarberApp"
+              width={46}
+              height={46}
+            />
+          </div>
+
+          {/* Title */}
+          <p className="flex-1 text-sm font-bold text-gold-gradient">
             Instalează BarberApp
           </p>
-          <p
-            style={{
-              fontSize: 12,
-              color: "oklch(0.65 0 0)",
-              margin: "2px 0 0",
-              lineHeight: 1.4,
-            }}
+
+          {/* Install button */}
+          <Button
+            size="sm"
+            className="shrink-0 !bg-[linear-gradient(to_right,oklch(0.55_0.15_72),var(--color-gold-light),oklch(0.55_0.15_72))] text-black font-bold hover:opacity-90"
+            onClick={handleInstall}
           >
-            Adaugă pe ecranul principal pentru acces rapid
-          </p>
+            <Download />
+            Instalează
+          </Button>
+
+          {/* Dismiss */}
+          <Button
+            size="icon-sm"
+            variant="ghost"
+            className="shrink-0 text-zinc-500 hover:text-zinc-300 hover:bg-white/5"
+            onClick={handleDismiss}
+          >
+            <X />
+          </Button>
         </div>
-
-        {/* Install button */}
-        <button
-          onClick={handleInstall}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-            padding: "8px 14px",
-            borderRadius: 12,
-            background: "oklch(0.84 0.18 80)",
-            color: "oklch(0.12 0 0)",
-            fontSize: 13,
-            fontWeight: 700,
-            border: "none",
-            cursor: "pointer",
-            flexShrink: 0,
-            whiteSpace: "nowrap",
-          }}
-        >
-          <Download size={14} />
-          Instalează
-        </button>
-
-        {/* Close button */}
-        <button
-          onClick={handleDismiss}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: 28,
-            height: 28,
-            borderRadius: 8,
-            background: "oklch(0.22 0 0)",
-            border: "none",
-            cursor: "pointer",
-            color: "oklch(0.60 0 0)",
-            flexShrink: 0,
-          }}
-        >
-          <X size={14} />
-        </button>
       </div>
     </div>
   );
