@@ -1,5 +1,5 @@
 {
-  "name": "BarberApp – Programări Online",
+  "name": "BarberApp",
   "short_name": "BarberApp",
   "description": "Programează-ți vizita la frizer rapid și simplu.",
   "start_url": "/",
@@ -59,14 +59,22 @@
       "purpose": "maskable any"
     }
   ],
-  "categories": ["lifestyle", "productivity"],
+  "categories": [
+    "lifestyle",
+    "productivity"
+  ],
   "shortcuts": [
     {
       "name": "Programează-te",
       "short_name": "Programare",
       "description": "Fă o programare nouă",
       "url": "/",
-      "icons": [{ "src": "/icons/icon-96x96.png", "sizes": "96x96" }]
+      "icons": [
+        {
+          "src": "/icons/icon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
     }
   ]
 }
