@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/components/providers/AuthProvider"
 import { Toaster } from "@/components/ui/sonner"
+import { PWAInstallPrompt } from "@/components/providers/PWAInstallPrompt"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -59,6 +60,7 @@ export default function RootLayout({
         <AuthProvider>
           {children}
           <Toaster position="top-center" expand={true} richColors />
+          <PWAInstallPrompt />
         </AuthProvider>
       </body>
     </html>
