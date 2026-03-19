@@ -73,8 +73,6 @@ export default function BottomNav({ items = defaultNavItems }: BottomNavProps) {
                 </div>
             </div>
 
-            {/* Home indicator */}
-            <div className="bottom-nav__home-indicator" />
         </nav>
     );
 }

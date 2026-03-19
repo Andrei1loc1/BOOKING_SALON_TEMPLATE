@@ -340,16 +340,6 @@
   font-weight: 600;
 }
 
-/* -- Home indicator (iOS style) -- */
-.bottom-nav__home-indicator {
-  width: 120px;
-  height: 4px;
-  background: oklch(0.70 0 0 / 0.5);
-  border-radius: 9999px;
-  margin: 6px auto 8px;
-  flex-shrink: 0;
-}
-
 /* -- Safe area padding for content above nav -- */
 .client-layout>main {
   padding-bottom: 90px;
