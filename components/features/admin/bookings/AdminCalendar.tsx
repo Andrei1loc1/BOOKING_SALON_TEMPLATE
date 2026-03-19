@@ -71,7 +71,7 @@ const AdminCalendar = ({ appointmentsByDate, selected, onSelect }: AdminCalendar
                     weekdays: 'flex w-full mb-1',
                     weekday: 'flex-1 text-center text-[11px] font-medium text-[oklch(0.40_0_0)] uppercase tracking-wide select-none py-1',
                     week: 'flex w-full',
-                    day: 'flex-1 aspect-square relative',
+                    day: 'flex-1 min-h-[2.5rem] relative',
                     outside: 'opacity-30',
                     disabled: 'opacity-20 cursor-not-allowed',
                     hidden: 'invisible',
