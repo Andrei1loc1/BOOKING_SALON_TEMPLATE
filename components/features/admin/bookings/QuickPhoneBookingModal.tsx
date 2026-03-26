@@ -189,7 +189,7 @@ export const QuickPhoneBookingModal: React.FC<QuickPhoneBookingModalProps> = ({
                                     />
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-3 relative">
+                                <div className="grid grid-cols-2 gap-3 mb-2">
                                     {/* Client Name */}
                                     <div className="flex flex-col gap-2">
                                         <Label className="text-xs text-[oklch(0.7_0_0)] flex items-center gap-2">
@@ -213,18 +213,17 @@ export const QuickPhoneBookingModal: React.FC<QuickPhoneBookingModalProps> = ({
                                             placeholder="Ex: 0700123456"
                                             className="bg-[oklch(0.1_0_0)] border-[oklch(0.3_0_0)] text-white"
                                         />
+                                        {/* Import From Contacts Button */}
+                                        {isContactPickerSupported && (
+                                            <button 
+                                                type="button"
+                                                onClick={handleContactPicker}
+                                                className="w-full mt-1 text-[11px] font-medium text-[oklch(0.84_0.18_80)] bg-[oklch(0.84_0.18_80_/_0.1)] px-2 py-1.5 rounded-[0.5rem] border border-[oklch(0.84_0.18_80_/_0.25)] flex justify-center items-center gap-1.5 hover:bg-[oklch(0.84_0.18_80_/_0.2)] transition-colors"
+                                            >
+                                                <BookUser className="w-3.5 h-3.5" /> Alege din Agendă
+                                            </button>
+                                        )}
                                     </div>
-
-                                    {/* Import From Contacts Button */}
-                                    {isContactPickerSupported && (
-                                        <button 
-                                            type="button"
-                                            onClick={handleContactPicker}
-                                            className="absolute -top-7 right-0 text-[10px] font-medium text-[oklch(0.84_0.18_80)] bg-[oklch(0.84_0.18_80_/_0.15)] px-2 py-1 rounded border border-[oklch(0.84_0.18_80_/_0.3)] flex items-center gap-1.5 hover:bg-[oklch(0.84_0.18_80_/_0.25)] transition-colors"
-                                        >
-                                            <BookUser className="w-3 h-3" /> Agendă
-                                        </button>
-                                    )}
                                 </div>
 
                                 {/* Service Selection */}
