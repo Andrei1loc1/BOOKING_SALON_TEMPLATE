@@ -48,6 +48,55 @@ const adminNavItems: NavItem[] = [
   { href: '/admin/settings', label: 'Setări', icon: SettingsIcon },
 ];
 
+/**
+ * Extracts phone and name from messy strings (like vCard format, plain text "Name: 07...", or raw numbers).
+ */
+function extractSharedContact(titleParam: string, textParam: string) {
+  let name = titleParam || '';
+  let phone = '';
+
+  const fullString = `${titleParam} \n ${textParam}`;
+
+  // 1. Daca e vCard (are BEGIN:VCARD)
+  if (fullString.includes('BEGIN:VCARD')) {
+    const telMatch = fullString.match(/TEL.*:(.*)/);
+    if (telMatch && telMatch[1]) {
+      phone = telMatch[1].trim();
+    }
+    const nameMatch = fullString.match(/FN:(.*)/);
+    if (nameMatch && nameMatch[1]) {
+      name = nameMatch[1].trim();
+    }
+  } else {
+    // 2. Text simplu sau combinat ("Ion Popescu 0755123456")
+    // Extragem cea mai lungă secvență care seamănă cu un număr de telefon
+    // Această expresie caută secvențe care pot conține + la început, cifre, spații, liniuțe (minim 9 caractere)
+    const phoneRegex = /(\+?(?:[0-9]\s*-?){9,14}[0-9])/;
+    const phoneMatch = textParam.match(phoneRegex);
+    
+    if (phoneMatch && phoneMatch[1]) {
+      phone = phoneMatch[1];
+      // Scoatem porțiunea de telefon din text pentru a vedea dacă a rămas vreun nume
+      const remainingText = textParam.replace(phone, '').trim();
+      if (!name && remainingText.length > 2 && remainingText.length < 30) {
+        // Dacă title era gol, considerăm textul rămas ca fiind numele (fără litere ciudate)
+        name = remainingText.replace(/[^a-zA-ZăâîșțĂÂÎȘȚ \-]/g, '').trim();
+      }
+    } else {
+      // Fallback: the whole text is probably just a raw phone number
+      phone = textParam;
+    }
+  }
+
+  // Curățăm numărul găsit
+  phone = phone.replace(/\D/g, ''); // păstrăm doar cifrele
+  if (phone.startsWith('40') && phone.length === 11) {
+    phone = '0' + phone.substring(2);
+  }
+
+  return { name, phone };
+}
+
 function ShareTargetHandler({ onOpen }: { onOpen: () => void }) {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -56,8 +105,13 @@ function ShareTargetHandler({ onOpen }: { onOpen: () => void }) {
   useEffect(() => {
     if (!searchParams) return;
     
-    const phone = searchParams.get('quickbookPhone');
-    const name = searchParams.get('quickbookName') || '';
+    // OS Web Share trimite în general title și text (text e folosit aici ptr număr conf. manifest.json)
+    const rawText = searchParams.get('quickbookPhone') || '';
+    const rawTitle = searchParams.get('quickbookName') || '';
+
+    if (!rawText && !rawTitle) return;
+
+    const { name, phone } = extractSharedContact(rawTitle, rawText);
     
     if (phone) {
       // Store in session storage so the modal can pick it up when it opens
