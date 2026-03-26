@@ -34,5 +34,14 @@
         }
       ]
     }
-  ]
+  ],
+  "share_target": {
+    "action": "/admin/bookings",
+    "method": "GET",
+    "params": {
+      "title": "quickbookName",
+      "text": "quickbookPhone",
+      "url": "sharedUrl"
+    }
+  }
 }

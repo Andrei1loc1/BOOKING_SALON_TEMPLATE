@@ -1,7 +1,8 @@
 'use client';
-import React from 'react';
+import React, { Suspense, useEffect } from 'react';
 import BottomNav from '@/components/layout/BottomNav';
 import type { NavItem } from '@/components/layout/BottomNav';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 
 const DashboardIcon = () => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -47,6 +48,36 @@ const adminNavItems: NavItem[] = [
   { href: '/admin/settings', label: 'Setări', icon: SettingsIcon },
 ];
 
+function ShareTargetHandler({ onOpen }: { onOpen: () => void }) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (!searchParams) return;
+    
+    const phone = searchParams.get('quickbookPhone');
+    const name = searchParams.get('quickbookName') || '';
+    
+    if (phone) {
+      // Store in session storage so the modal can pick it up when it opens
+      sessionStorage.setItem('tempSharedPhone', phone);
+      sessionStorage.setItem('tempSharedName', name);
+      onOpen();
+      
+      // Remove query params from URL so it doesn't trigger again on refresh
+      const newParams = new URLSearchParams(searchParams.toString());
+      newParams.delete('quickbookPhone');
+      newParams.delete('quickbookName');
+      const newUrl = `${pathname}${newParams.toString() ? `?${newParams.toString()}` : ''}`;
+      // Use replace to not bloat browser history
+      router.replace(newUrl);
+    }
+  }, [searchParams, pathname, router, onOpen]);
+
+  return null;
+}
+
 export default function AdminLayout({
   children,
 }: {
@@ -57,6 +88,10 @@ export default function AdminLayout({
   return (
     <div className="admin-layout">
       <main>{children}</main>
+
+      <Suspense fallback={null}>
+        <ShareTargetHandler onOpen={() => setIsQuickBookingOpen(true)} />
+      </Suspense>
       
       {/* Quick Booking Modal for phone calls */}
       <QuickPhoneBookingModal 

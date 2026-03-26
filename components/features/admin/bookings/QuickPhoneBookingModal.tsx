@@ -9,7 +9,7 @@ import { createAppointment } from '@/actions/booking-actions'
 import { useServices } from '@/hooks/useServices'
 import { useAuth } from '@/hooks/useAuth'
 import { toDateKey } from '@/lib/date-utils'
-import { Calendar, Clock, User, Scissors, Check, Phone } from 'lucide-react'
+import { Calendar, Clock, User, Scissors, Check, Phone, BookUser } from 'lucide-react'
 
 // Convert local Date to "YYYY-MM-DD" for the date input
 function toInputDateStr(date: Date): string {
@@ -47,13 +47,59 @@ export const QuickPhoneBookingModal: React.FC<QuickPhoneBookingModalProps> = ({
     const [selectedTime, setSelectedTime] = useState<string | null>(null)
     const [submitting, setSubmitting] = useState(false)
     const [success, setSuccess] = useState(false)
+    const [isContactPickerSupported, setIsContactPickerSupported] = useState(false)
+
+    useEffect(() => {
+        if (typeof navigator !== 'undefined' && 'contacts' in navigator && 'ContactsManager' in window) {
+            setIsContactPickerSupported(true)
+        }
+    }, [])
+
+    const handleContactPicker = async () => {
+        try {
+            const props = ['name', 'tel']
+            const opts = { multiple: false }
+            // @ts-ignore - Contact Picker API is not fully typed in TypeScript's standard DOM library
+            const contacts = await navigator.contacts.select(props, opts)
+            
+            if (contacts && contacts.length > 0) {
+                const contact = contacts[0]
+                if (contact.name && contact.name.length > 0) {
+                    setClientName(contact.name[0])
+                }
+                if (contact.tel && contact.tel.length > 0) {
+                    let phoneStr = contact.tel[0]
+                    // Clean phone formats like +40 722...
+                    phoneStr = phoneStr.replace(/\D/g, '')
+                    if (phoneStr.startsWith('40') && phoneStr.length === 11) {
+                        phoneStr = '0' + phoneStr.substring(2)
+                    }
+                    setClientPhone(phoneStr)
+                }
+            }
+        } catch (ex) {
+            console.log('Contact picker cancelled or errored:', ex)
+        }
+    }
 
     // Reset form when modal opens
     useEffect(() => {
         if (open) {
             setSelectedDateStr(toInputDateStr(new Date()))
-            setClientName('')
-            setClientPhone('')
+            
+            // Check for shared contact data
+            const sharedPhone = sessionStorage.getItem('tempSharedPhone')
+            const sharedName = sessionStorage.getItem('tempSharedName')
+            
+            setClientName(sharedName || '')
+            setClientPhone(sharedPhone || '')
+            
+            // Clear immediately to prevent subsequent opens from remembering it
+            if (sharedPhone || sharedName) {
+                sessionStorage.removeItem('tempSharedPhone')
+                sessionStorage.removeItem('tempSharedName')
+            }
+            
             setSelectedService(null)
             setSelectedTime(null)
             setSuccess(false)
@@ -143,7 +189,7 @@ export const QuickPhoneBookingModal: React.FC<QuickPhoneBookingModalProps> = ({
                                     />
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-3">
+                                <div className="grid grid-cols-2 gap-3 relative">
                                     {/* Client Name */}
                                     <div className="flex flex-col gap-2">
                                         <Label className="text-xs text-[oklch(0.7_0_0)] flex items-center gap-2">
@@ -168,6 +214,17 @@ export const QuickPhoneBookingModal: React.FC<QuickPhoneBookingModalProps> = ({
                                             className="bg-[oklch(0.1_0_0)] border-[oklch(0.3_0_0)] text-white"
                                         />
                                     </div>
+
+                                    {/* Import From Contacts Button */}
+                                    {isContactPickerSupported && (
+                                        <button 
+                                            type="button"
+                                            onClick={handleContactPicker}
+                                            className="absolute -top-7 right-0 text-[10px] font-medium text-[oklch(0.84_0.18_80)] bg-[oklch(0.84_0.18_80_/_0.15)] px-2 py-1 rounded border border-[oklch(0.84_0.18_80_/_0.3)] flex items-center gap-1.5 hover:bg-[oklch(0.84_0.18_80_/_0.25)] transition-colors"
+                                        >
+                                            <BookUser className="w-3 h-3" /> Agendă
+                                        </button>
+                                    )}
                                 </div>
 
                                 {/* Service Selection */}
