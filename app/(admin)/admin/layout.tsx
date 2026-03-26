@@ -170,7 +170,7 @@ export default function AdminLayout({
         centerAction={
           <div 
             className="bottom-nav__item" 
-            style={{ cursor: 'pointer', paddingLeft: 8, paddingRight: 8, minWidth: 64 }} 
+            style={{ cursor: 'pointer' }} 
             onClick={() => setIsQuickBookingOpen(true)}
           >
             <div className="bottom-nav__icon">
