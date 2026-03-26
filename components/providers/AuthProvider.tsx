@@ -21,8 +21,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setUser(firebaseUser)
 
             if (firebaseUser) {
-                // Setăm cookie-ul pentru middleware — expiră în 30 de zile
-                Cookies.set('auth-session', '1', { expires: 30, sameSite: 'strict' })
+                // Setăm cookie-ul pentru middleware — expansiv pentru Share Intents din alte aplicații (Lax)
+                Cookies.set('auth-session', '1', { expires: 30, sameSite: 'lax' })
             } else {
                 // Ștergem cookie-ul la logout
                 Cookies.remove('auth-session')
