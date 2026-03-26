@@ -67,8 +67,20 @@ function extractSharedContact(titleParam: string, textParam: string) {
     if (nameMatch && nameMatch[1]) {
       name = nameMatch[1].trim();
     }
-  } else {
-    // 2. Text simplu sau combinat ("Ion Popescu 0755123456")
+  } 
+  // 2. Format custom cu paranteze ex: "[Name] Roger \n [Mobile] 07xxx"
+  else if (fullString.includes('[Name]') || fullString.includes('[Mobile]') || fullString.includes('[Phone]')) {
+    const nameMatch = fullString.match(/\[Name\]\s*(.*)/i);
+    if (nameMatch && nameMatch[1]) {
+      name = nameMatch[1].trim();
+    }
+    const phoneMatch = fullString.match(/\[(?:Mobile|Phone|Telefon)\]\s*(.*)/i);
+    if (phoneMatch && phoneMatch[1]) {
+      phone = phoneMatch[1].trim();
+    }
+  } 
+  else {
+    // 3. Text simplu sau combinat ("Ion Popescu 0755123456")
     // Extragem cea mai lungă secvență care seamănă cu un număr de telefon
     // Această expresie caută secvențe care pot conține + la început, cifre, spații, liniuțe (minim 9 caractere)
     const phoneRegex = /(\+?(?:[0-9]\s*-?){9,14}[0-9])/;
