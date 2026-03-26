@@ -37,6 +37,9 @@ const SettingsIcon = () => (
   </svg>
 );
 
+import QuickPhoneBookingModal from '@/components/features/admin/bookings/QuickPhoneBookingModal';
+import { Plus } from 'lucide-react';
+
 const adminNavItems: NavItem[] = [
   { href: '/admin/dashboard', label: 'Dashboard', icon: DashboardIcon },
   { href: '/admin/bookings', label: 'Rezervări', icon: BookingsIcon },
@@ -49,10 +52,34 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const [isQuickBookingOpen, setIsQuickBookingOpen] = React.useState(false);
+
   return (
     <div className="admin-layout">
       <main>{children}</main>
-      <BottomNav items={adminNavItems} />
+      
+      {/* Quick Booking Modal for phone calls */}
+      <QuickPhoneBookingModal 
+        open={isQuickBookingOpen} 
+        onOpenChange={setIsQuickBookingOpen} 
+      />
+
+      <BottomNav 
+        items={adminNavItems} 
+        centerAction={
+          <div 
+            className="bottom-nav__item" 
+            style={{ cursor: 'pointer', paddingLeft: 8, paddingRight: 8, minWidth: 64 }} 
+            onClick={() => setIsQuickBookingOpen(true)}
+          >
+            <div className="bottom-nav__icon">
+              <div className="bottom-nav__center-btn">
+                <Plus size={26} strokeWidth={2.5} />
+              </div>
+            </div>
+          </div>
+        }
+      />
     </div>
   );
 }

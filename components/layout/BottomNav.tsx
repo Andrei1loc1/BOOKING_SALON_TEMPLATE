@@ -49,30 +49,44 @@ const defaultNavItems: NavItem[] = [
 
 interface BottomNavProps {
     items?: NavItem[];
+    centerAction?: React.ReactNode;
 }
 
-export default function BottomNav({ items = defaultNavItems }: BottomNavProps) {
+export default function BottomNav({ items = defaultNavItems, centerAction }: BottomNavProps) {
     const pathname = usePathname();
+
+    const mid = Math.floor(items.length / 2);
+    const leftItems = centerAction ? items.slice(0, mid) : items;
+    const rightItems = centerAction ? items.slice(mid) : [];
+
+    const renderItem = ({ href, label, icon: Icon }: NavItem) => {
+        const isActive = pathname === href;
+        return (
+            <Link key={href} href={href} className={`bottom-nav__item ${isActive ? 'bottom-nav__item--active' : ''}`}>
+                <span className="bottom-nav__icon">
+                    <Icon />
+                    {isActive && <span className="bottom-nav__icon-glow" />}
+                </span>
+                <span className="bottom-nav__label">{label}</span>
+            </Link>
+        );
+    };
 
     return (
         <nav className="bottom-nav">
             <div className="bottom-nav__row">
                 <div className="bottom-nav__items">
-                    {items.map(({ href, label, icon: Icon }) => {
-                        const isActive = pathname === href;
-                        return (
-                            <Link key={href} href={href} className={`bottom-nav__item ${isActive ? 'bottom-nav__item--active' : ''}`}>
-                                <span className="bottom-nav__icon">
-                                    <Icon />
-                                    {isActive && <span className="bottom-nav__icon-glow" />}
-                                </span>
-                                <span className="bottom-nav__label">{label}</span>
-                            </Link>
-                        );
-                    })}
+                    {leftItems.map(renderItem)}
+
+                    {centerAction && (
+                        <div className="bottom-nav__center-action">
+                            {centerAction}
+                        </div>
+                    )}
+
+                    {centerAction && rightItems.map(renderItem)}
                 </div>
             </div>
-
         </nav>
     );
 }
