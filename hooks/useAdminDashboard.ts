@@ -78,12 +78,22 @@ export function useAdminDashboard() {
         return () => clearInterval(interval)
     }, [checkAndAutoComplete])
 
+    const today = new Date().toISOString().split('T')[0]
+    const now = new Date()
+    const currentTime = now.toTimeString().slice(0, 5) // HH:MM format
+
     const todayAppointments = appointments
-        .filter(a => a.date === new Date().toISOString().split('T')[0] && a.status !== 'cancelled')
+        .filter(a => {
+            if (a.date !== today) return false
+            if (a.status === 'cancelled') return false
+            if (a.status === 'completed' && a.time < currentTime) return false // Hide past completed appointments
+            return true
+        })
         .sort((a, b) => a.time.localeCompare(b.time))
 
     const recentAppointments = [...appointments]
-        .sort((a, b) => b.created_at.localeCompare(a.created_at))
+        .filter(a => a.status === 'completed')
+        .sort((a, b) => b.date_time.localeCompare(a.date_time))
         .slice(0, 8)
 
     return {

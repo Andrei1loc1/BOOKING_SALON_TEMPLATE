@@ -41,7 +41,7 @@ const ProfileIcon = () => (
 );
 
 const defaultNavItems: NavItem[] = [
-    { href: '/', label: 'Home', icon: HomeIcon },
+    { href: '/homepage', label: 'Home', icon: HomeIcon },
     { href: '/booking', label: 'Rezervari', icon: CalendarIcon },
     { href: '/history', label: 'Istoric', icon: HistoryIcon },
     { href: '/profile', label: 'Profil', icon: ProfileIcon },
