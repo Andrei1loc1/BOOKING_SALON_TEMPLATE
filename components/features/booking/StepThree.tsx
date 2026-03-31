@@ -39,7 +39,7 @@ function buildRows(service: Service, date: Date, time: string, offers: Offer[], 
                     <span className="line-through text-white/40 text-sm">{service.price} {currency}</span>
                     <span className="text-gold-light font-bold">{discountedPrice} {currency}</span>
                 </span>
-            ) : `${service.price} {currency}`,
+            ) : `${service.price} ${currency}`,
         },
     ]
 }
